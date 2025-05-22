@@ -1,4 +1,7 @@
-import java.sql.SQLOutput;
+import Tasks.Epic;
+import Tasks.Status;
+import Tasks.Subtask;
+import Tasks.Task;
 
 public class Main {
 
@@ -60,12 +63,10 @@ public class Main {
         // Обновление подзадачи и эпика
         subtask1 = new Subtask(5, "Засунуть кота в переноску", "Достать переноску, поймать кота", Status.DONE, 4);
         taskManager.updateSubtask(subtask1);
-        taskManager.updateStatusOfEpic();
 
         // Обновление подзадачи и эпика
-        subtask3 = new Subtask(7, "Купить билеты, забронировать гостиницу", "Приложение авиасейлз", Status.IN_PROGRESS, 3);
+        subtask3 = new Subtask(7, "Купить билеты, забронировать гостиницу", "Приложение авиасейлз", Status.DONE, 3);
         taskManager.updateSubtask(subtask3);
-        taskManager.updateStatusOfEpic();
 
         System.out.println("Обновление статусов задач, подзадач, эпиков");
         System.out.println(taskManager.getTasks());
@@ -85,6 +86,7 @@ public class Main {
         System.out.println("Удаление задачи и эпика");
         System.out.println(taskManager.getTasks());
         System.out.println(taskManager.getEpics());
+        System.out.println(taskManager.getSubtasks());
 
     }
 }
