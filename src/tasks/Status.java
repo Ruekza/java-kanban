@@ -1,4 +1,4 @@
-package Tasks;
+package tasks;
 
 public enum Status {
     NEW, // новая задача, к решению еще не приступили

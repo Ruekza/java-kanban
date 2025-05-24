@@ -1,7 +1,7 @@
-import Tasks.Epic;
-import Tasks.Status;
-import Tasks.Subtask;
-import Tasks.Task;
+import tasks.Epic;
+import tasks.Status;
+import tasks.Subtask;
+import tasks.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,8 +32,6 @@ public class TaskManager {
     public Task updateTask(Task task) { // обновление задачи
         if (tasks.containsValue(task)) {
             tasks.put(task.getId(), task);
-        } else {
-            createTask(task);
         }
         return task;
     }
@@ -66,8 +64,6 @@ public class TaskManager {
             Epic oldEpic = epics.get(epic.getId());
             oldEpic.setName(epic.getName());
             oldEpic.setDescription(epic.getDescription());
-        } else {
-            createEpic(epic);
         }
         return epic;
     }
@@ -133,8 +129,6 @@ public class TaskManager {
             ArrayList<Integer> subtId = epic.getSubtaskId();
             subtId.add(subtask.getId());
             updateStatusOfEpic();
-        } else {
-            System.out.println("Такого эпика не существует");
         }
         return subtask;
     }
@@ -145,8 +139,6 @@ public class TaskManager {
             subtasks.put(subtask.getId(), subtask);
             // обновляем статус эпика:
             updateStatusOfEpic();
-        } else {
-            System.out.println("Такой подзадачи не существует");
         }
         return subtask;
     }
