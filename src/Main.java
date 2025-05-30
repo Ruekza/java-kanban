@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Поехали!");
 
-        TaskManager taskManager = new TaskManager();
+        TaskManager taskManager = new InMemoryTaskManager();
 
         // Тестирование
         // Создание задач, эпиков, подзадач:
