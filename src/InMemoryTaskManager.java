@@ -13,10 +13,26 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Subtask> subtasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private Integer generatorId = 1;
+    private ArrayList<Task> historyTask = new ArrayList<>(10);
+
+    @Override
+    public ArrayList<Task> getHistory() {
+        return historyTask;
+    }
+
+    private void addHistory(Task task) {
+        if(historyTask.size()<10) {
+            historyTask.add(task);
+        } else {
+            historyTask.remove(0);
+            historyTask.add(task);
+        }
+    }
 
     // МЕТОДЫ ДЛЯ ЗАДАЧИ
     @Override
     public ArrayList<Task> getTasks() { // получение списка всех задач
+
         return new ArrayList<>(tasks.values());
     }
 
@@ -46,7 +62,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTask(Integer id) { // получение задачи по id
-        return tasks.get(id);
+        Task task = tasks.get(id);
+        addHistory(task);
+        return task;
     }
 
     @Override
