@@ -1,14 +1,17 @@
+import manager.InMemoryTaskManager;
+import manager.TaskManager;
 import tasks.Epic;
 import tasks.Status;
 import tasks.Subtask;
 import tasks.Task;
+
 
 public class Main {
 
     public static void main(String[] args) {
         System.out.println("Поехали!");
 
-        TaskManager taskManager = new InMemoryTaskManager();
+        TaskManager taskManager = Managers.getDefault();
 
         // Тестирование
         // Создание задач, эпиков, подзадач:
@@ -88,5 +91,9 @@ public class Main {
         System.out.println(taskManager.getEpics());
         System.out.println(taskManager.getSubtasks());
 
+        // Просмотр списка историй
+        System.out.println(taskManager.getTask(1));
+        System.out.println("Просмотр списка историй");
+        System.out.println(taskManager.getHistory());
     }
 }
