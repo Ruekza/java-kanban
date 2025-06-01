@@ -1,3 +1,5 @@
+package manager;
+
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
@@ -5,6 +7,10 @@ import tasks.Task;
 import java.util.ArrayList;
 
 public interface TaskManager {
+
+    ArrayList<Task> getHistory();
+
+
     // МЕТОДЫ ДЛЯ ЗАДАЧИ
     ArrayList<Task> getTasks();
 
@@ -32,7 +38,7 @@ public interface TaskManager {
     void deleteAllEpics();
 
     // МЕТОДЫ ДЛЯ ПОДЗАДАЧ
-    // получение списка всех подзадач
+
     ArrayList<Subtask> getSubtasks();
 
     Subtask createSubtask(Subtask subtask);

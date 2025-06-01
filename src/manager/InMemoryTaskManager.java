@@ -1,7 +1,10 @@
+package manager;
+
 import tasks.Epic;
 import tasks.Status;
 import tasks.Subtask;
 import tasks.Task;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,19 +17,15 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private Integer generatorId = 1;
     private ArrayList<Task> historyTask = new ArrayList<>(10);
+    private HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
     public ArrayList<Task> getHistory() {
-        return historyTask;
+        return historyManager.getHistory();
     }
 
     private void addHistory(Task task) {
-        if(historyTask.size()<10) {
-            historyTask.add(task);
-        } else {
-            historyTask.remove(0);
-            historyTask.add(task);
-        }
+        historyManager.add(task);
     }
 
     // МЕТОДЫ ДЛЯ ЗАДАЧИ
@@ -107,7 +106,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Epic getEpic(Integer id) { // получение эпика по id
-        return epics.get(id);
+        Epic epic = epics.get(id);
+        addHistory(epic);
+        return epic;
     }
 
     @Override
@@ -188,7 +189,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Subtask getSubtask(Integer id) { // получение подзадачи по id
-        return subtasks.get(id);
+        Subtask subtask = subtasks.get(id);
+        addHistory(subtask);
+        return subtask;
     }
 
     @Override

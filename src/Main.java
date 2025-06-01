@@ -1,4 +1,4 @@
-import manager.InMemoryTaskManager;
+import manager.Managers;
 import manager.TaskManager;
 import tasks.Epic;
 import tasks.Status;
@@ -90,9 +90,12 @@ public class Main {
         System.out.println(taskManager.getTasks());
         System.out.println(taskManager.getEpics());
         System.out.println(taskManager.getSubtasks());
+        System.out.println();
 
         // Просмотр списка историй
-        System.out.println(taskManager.getTask(1));
+        taskManager.getTask(1);
+        taskManager.getEpic(3);
+        taskManager.getSubtask(7);
         System.out.println("Просмотр списка историй");
         System.out.println(taskManager.getHistory());
     }
