@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 import tasks.Status;
 import tasks.Task;
 
-import java.util.ArrayList;
+
+import java.util.List;
 
 public class ManagersTest {
 
@@ -25,7 +26,7 @@ public class ManagersTest {
         Assertions.assertNotNull(historyManager); //проверяем, что объект-менеджер истории есть и не нулевой
         Task task = new Task("name", "desc", Status.NEW);
         historyManager.add(task); //проверяем, что объект-менеджер истории работает(выполняет свои методы)
-        ArrayList<Task> history = historyManager.getHistory();
+        List<Task> history = historyManager.getHistory();
         Assertions.assertEquals(1, history.size());
 
 

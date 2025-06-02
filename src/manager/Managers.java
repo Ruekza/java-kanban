@@ -2,6 +2,10 @@ package manager;
 
 public class Managers {
 
+    private Managers() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
+
     public static TaskManager getDefault() {
         return new InMemoryTaskManager();
     }
