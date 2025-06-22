@@ -116,7 +116,7 @@ public class InMemoryTaskManager implements TaskManager {
         epics.clear();
     }
 
-    private void updateStatusOfEpic() {// обновление статуса эпика
+    private void updateStatusOfEpic() { // обновление статуса эпика
         for (Epic epic : epics.values()) {
             ArrayList<Integer> subtId = epic.getSubtaskId();
             boolean isAllSubtaskDone = true;
