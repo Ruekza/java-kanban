@@ -6,6 +6,7 @@ import tasks.Epic;
 import tasks.Status;
 import tasks.Subtask;
 import tasks.Task;
+
 import java.util.List;
 
 import java.util.ArrayList;
@@ -103,7 +104,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void doesNotChangeTaskWhenAddingtoTaskManager()  {
+    public void doesNotChangeTaskWhenAddingtoTaskManager() {
         Task task = new Task("name", "desc", Status.NEW);
         taskManager.createTask(task);
         Task savedTask = taskManager.getTask(task.getId());

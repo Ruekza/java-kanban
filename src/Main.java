@@ -30,7 +30,7 @@ public class Main {
         Subtask subtask5 = new Subtask("sub5", "desc5", Status.NEW, 4);
         taskManager.createSubtask(subtask5);
 
-        Subtask subtask6= new Subtask("sub6", "desc6", Status.NEW, 4);
+        Subtask subtask6 = new Subtask("sub6", "desc6", Status.NEW, 4);
         taskManager.createSubtask(subtask6);
 
         Subtask subtask7 = new Subtask("sub7", "desc7", Status.NEW, 4);
@@ -39,7 +39,7 @@ public class Main {
         System.out.println("Создание задач, эпиков, подзадач");
         System.out.println(taskManager.getTasks());
         System.out.println(taskManager.getEpics());
-        System.out.println( );
+        System.out.println();
 
         // запрашиваем созданные задачи в разном порядке
         taskManager.getTask(2);
@@ -61,13 +61,13 @@ public class Main {
         taskManager.getTask(2);
         System.out.println("Просмотр списка историй");
         System.out.println(taskManager.getHistory());
-        System.out.println( );
+        System.out.println();
 
         // удалеляем задачу и проверяем, что ее нет в истории тоже
         taskManager.deleteTask(2);
         System.out.println("Просмотр списка историй после удаления задачи 2");
         System.out.println(taskManager.getHistory());
-        System.out.println( );
+        System.out.println();
 
         // удаляем эпик с тремя подзадачами и проверяем, что его нет в истории тоже
         taskManager.deleteEpic(4);
