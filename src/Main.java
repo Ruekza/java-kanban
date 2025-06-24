@@ -62,7 +62,7 @@ public class Main {
         System.out.println(taskManager.getHistory());
         System.out.println();
 
-        // удалеляем задачу и проверяем, что ее нет в истории тоже
+        // удаляем задачу и проверяем, что ее нет в истории тоже
         taskManager.deleteTask(2);
         System.out.println("Просмотр списка историй после удаления задачи 2");
         System.out.println(taskManager.getHistory());
@@ -72,5 +72,7 @@ public class Main {
         taskManager.deleteEpic(4);
         System.out.println("Просмотр списка историй после удаления эпика 4'");
         System.out.println(taskManager.getHistory());
+
+
     }
 }

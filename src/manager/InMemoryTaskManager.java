@@ -67,6 +67,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteAllTasks() { // удаление всех задач
         tasks.clear();
+        historyManager.removeAllHistory();
     }
 
     // МЕТОДЫ ДЛЯ ЭПИКА
@@ -114,6 +115,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteAllEpics() { // удаление всех эпиков
         subtasks.clear();
         epics.clear();
+        historyManager.removeAllHistory();
     }
 
     private void updateStatusOfEpic() { // обновление статуса эпика
@@ -213,7 +215,9 @@ public class InMemoryTaskManager implements TaskManager {
         }
         subtasks.clear();
         updateStatusOfEpic();
+        historyManager.removeAllHistory();
     }
+
 
 }
 
