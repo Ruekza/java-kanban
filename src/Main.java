@@ -73,6 +73,5 @@ public class Main {
         System.out.println("Просмотр списка историй после удаления эпика 4'");
         System.out.println(taskManager.getHistory());
 
-
     }
 }

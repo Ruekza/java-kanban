@@ -22,7 +22,7 @@ public class InMemoryHistoryManagerTest {
         Task task2 = new Task(1, "Отпуск", "Купить билеты", Status.DONE);
         historyManager.add(task2);
         List<Task> history2 = historyManager.getHistory();
-        Assertions.assertEquals(1, history2.size(), "После добавления обновленной задачи размер должен быть 2");
+        Assertions.assertEquals(1, history2.size(), "После добавления обновленной задачи размер должен быть 1");
     }
 
     @Test
