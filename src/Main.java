@@ -13,90 +13,65 @@ public class Main {
 
         TaskManager taskManager = Managers.getDefault();
 
-        // Тестирование
-        // Создание задач, эпиков, подзадач:
-
-        // Создание задачи
-        Task task1 = new Task("Похудеть до конца года", "Сбросить 10 кг", Status.NEW);
+        // создаем задачи и эпики с подзадачами
+        Task task1 = new Task("task1", "desc1", Status.NEW);
         taskManager.createTask(task1);
 
-        // Создание задачи
-        Task task2 = new Task("Купить соковыжималку", "Moulinex, центробежная", Status.NEW);
+        Task task2 = new Task("task2", "desc2", Status.NEW);
         taskManager.createTask(task2);
 
-        // Создание эпика
-        Epic epic1 = new Epic("Запланировать отпуск", "Всё подготовить к 15 июня", Status.NEW, null);
-        taskManager.createEpic(epic1);
+        Epic epic3 = new Epic("epic3", "desc3", Status.NEW, null);
+        taskManager.createEpic(epic3);
 
-        // Создание эпика
-        Epic epic2 = new Epic("Отвезти кота к ветеринару", "Ежегодная прививка", Status.NEW, null);
-        taskManager.createEpic(epic2);
+        Epic epic4 = new Epic("epic4", "desc4", Status.NEW, null);
+        taskManager.createEpic(epic4);
 
-        // Создание подзадачи
-        Subtask subtask1 = new Subtask("Засунуть кота в переноску", "Достать переноску, поймать кота", Status.NEW, 4);
-        taskManager.createSubtask(subtask1);
+        Subtask subtask5 = new Subtask("sub5", "desc5", Status.NEW, 4);
+        taskManager.createSubtask(subtask5);
 
-        // Создание подзадачи"
-        Subtask subtask2 = new Subtask("Вызвать такси", "Заказать такси в приложении", Status.NEW, 4);
-        taskManager.createSubtask(subtask2);
+        Subtask subtask6 = new Subtask("sub6", "desc6", Status.NEW, 4);
+        taskManager.createSubtask(subtask6);
 
-        // Создание подзадачи"
-        Subtask subtask3 = new Subtask("Купить билеты, забронировать гостиницу", "Приложение авиасейлз", Status.NEW, 3);
-        taskManager.createSubtask(subtask3);
-
-        // Распечатываем списки задач, эпиков, подзадач:
+        Subtask subtask7 = new Subtask("sub7", "desc7", Status.NEW, 4);
+        taskManager.createSubtask(subtask7);
 
         System.out.println("Создание задач, эпиков, подзадач");
         System.out.println(taskManager.getTasks());
         System.out.println(taskManager.getEpics());
-        System.out.println(taskManager.getSubtasks());
         System.out.println();
 
-
-        // Обновляем статусы задач, подзадач и эпиков (для эпиков рассчитываем):
-
-        // Обновление задачи
-        Task task3 = new Task(task1.getId(), "Похудеть до конца года", "Сбросить 10 кг", Status.IN_PROGRESS);
-        taskManager.updateTask(task3);
-
-        // Обновление задачи
-        Task task4 = new Task(task2.getId(), "Купить соковыжималку", "Moulinex, центробежная", Status.DONE);
-        taskManager.updateTask(task4);
-
-        // Обновление подзадачи и эпика
-        subtask1 = new Subtask(5, "Засунуть кота в переноску", "Достать переноску, поймать кота", Status.DONE, 4);
-        taskManager.updateSubtask(subtask1);
-
-        // Обновление подзадачи и эпика
-        subtask3 = new Subtask(7, "Купить билеты, забронировать гостиницу", "Приложение авиасейлз", Status.DONE, 3);
-        taskManager.updateSubtask(subtask3);
-
-        System.out.println("Обновление статусов задач, подзадач, эпиков");
-        System.out.println(taskManager.getTasks());
-        System.out.println(taskManager.getEpics());
-        System.out.println(taskManager.getSubtasks());
-        System.out.println();
-
-
-        // Удаление задачи и эпика:
-
-        // Удаление задачи
-        taskManager.deleteTask(task2.getId());
-
-        // Удаление эпика
-        taskManager.deleteEpic(epic2.getId());
-
-        System.out.println("Удаление задачи и эпика");
-        System.out.println(taskManager.getTasks());
-        System.out.println(taskManager.getEpics());
-        System.out.println(taskManager.getSubtasks());
-        System.out.println();
-
-        // Просмотр списка историй
-        taskManager.getTask(1);
-        taskManager.getEpic(3);
-        taskManager.getSubtask(7);
+        // запрашиваем созданные задачи в разном порядке
+        taskManager.getTask(2);
         System.out.println("Просмотр списка историй");
         System.out.println(taskManager.getHistory());
+
+        taskManager.getTask(1);
+        System.out.println("Просмотр списка историй");
+        System.out.println(taskManager.getHistory());
+
+        taskManager.getEpic(4);
+        System.out.println("Просмотр списка историй");
+        System.out.println(taskManager.getHistory());
+
+        taskManager.getEpic(3);
+        System.out.println("Просмотр списка историй");
+        System.out.println(taskManager.getHistory());
+
+        taskManager.getTask(2);
+        System.out.println("Просмотр списка историй");
+        System.out.println(taskManager.getHistory());
+        System.out.println();
+
+        // удаляем задачу и проверяем, что ее нет в истории тоже
+        taskManager.deleteTask(2);
+        System.out.println("Просмотр списка историй после удаления задачи 2");
+        System.out.println(taskManager.getHistory());
+        System.out.println();
+
+        // удаляем эпик с тремя подзадачами и проверяем, что его нет в истории тоже
+        taskManager.deleteEpic(4);
+        System.out.println("Просмотр списка историй после удаления эпика 4'");
+        System.out.println(taskManager.getHistory());
+
     }
 }

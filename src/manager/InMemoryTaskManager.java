@@ -53,6 +53,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task deleteTask(Integer id) { // удаление задачи
+        historyManager.remove(id);
         return tasks.remove(id);
     }
 
@@ -65,7 +66,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllTasks() { // удаление всех задач
+        ArrayList<Integer> idList = new ArrayList<>(tasks.keySet());
         tasks.clear();
+        historyManager.removeAllHistory(idList);
     }
 
     // МЕТОДЫ ДЛЯ ЭПИКА
@@ -93,6 +96,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Epic deleteEpic(Integer id) { // удаление эпика
+        historyManager.remove(id);
         Epic epic = epics.get(id);
         ArrayList<Integer> subtaskId = epic.getSubtaskId();
         for (Integer subId : subtaskId) {
@@ -110,11 +114,20 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllEpics() { // удаление всех эпиков
+        for (Epic epic : epics.values()) {
+            ArrayList<Integer> subtId = epic.getSubtaskId();
+            if (subtId != null) {
+                historyManager.removeAllHistory(subtId);
+            }
+        }
+        ArrayList<Integer> idList = new ArrayList<>(epics.keySet());
+        historyManager.removeAllHistory(idList);
         subtasks.clear();
         epics.clear();
     }
 
-    private void updateStatusOfEpic() {// обновление статуса эпика
+
+    private void updateStatusOfEpic() { // обновление статуса эпика
         for (Epic epic : epics.values()) {
             ArrayList<Integer> subtId = epic.getSubtaskId();
             boolean isAllSubtaskDone = true;
@@ -176,6 +189,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Subtask deleteSubtask(Integer id) { // удаление подзадачи по id и ее удаление из эпика
+        historyManager.remove(id);
         Subtask subtask = subtasks.get(id);
         Epic epic = epics.get(subtask.getEpicId());
         ArrayList<Integer> subt = epic.getSubtaskId();
@@ -206,11 +220,13 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteAllSubtasks() { // удаление всех подзадач и из эпика тоже
         for (Epic epic : epics.values()) {
             ArrayList<Integer> subtId = epic.getSubtaskId();
+            historyManager.removeAllHistory(subtId);
             subtId.clear();
         }
         subtasks.clear();
         updateStatusOfEpic();
     }
+
 
 }
 

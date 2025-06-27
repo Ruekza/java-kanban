@@ -24,11 +24,9 @@ public class ManagersTest {
     public void CreateAndWorkHistoryManager() {
         HistoryManager historyManager = Managers.getDefaultHistory();
         Assertions.assertNotNull(historyManager); //проверяем, что объект-менеджер истории есть и не нулевой
-        Task task = new Task("name", "desc", Status.NEW);
+        Task task = new Task(1, "name", "desc", Status.NEW);
         historyManager.add(task); //проверяем, что объект-менеджер истории работает(выполняет свои методы)
         List<Task> history = historyManager.getHistory();
         Assertions.assertEquals(1, history.size());
-
-
     }
 }

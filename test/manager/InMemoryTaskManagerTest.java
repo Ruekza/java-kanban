@@ -7,6 +7,8 @@ import tasks.Status;
 import tasks.Subtask;
 import tasks.Task;
 
+import java.util.List;
+
 import java.util.ArrayList;
 
 public class InMemoryTaskManagerTest {
@@ -102,10 +104,25 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void doesNotChangeTaskWhenAddingtoTaskManager()  {
+    public void doesNotChangeTaskWhenAddingtoTaskManager() {
         Task task = new Task("name", "desc", Status.NEW);
         taskManager.createTask(task);
         Task savedTask = taskManager.getTask(task.getId());
         Assertions.assertTrue(task.getName() == savedTask.getName() && task.getDescription() == savedTask.getDescription() && task.getStatus() == savedTask.getStatus());
+    }
+
+    @Test
+    public void checkEpicDoesNotHaveRemovedSubtusk() {
+        Epic epic = new Epic("epic", "desc_epic", Status.NEW, null);
+        taskManager.createEpic(epic);
+        Subtask sub1 = new Subtask("subtask1", "desc_sub1", Status.NEW, 1);
+        Subtask sub2 = new Subtask("subtask2", "desc_sub2", Status.NEW, 1);
+        taskManager.createSubtask(sub1);
+        taskManager.createSubtask(sub2);
+        List<Integer> list1 = epic.getSubtaskId();
+        Assertions.assertEquals(2, list1.size());
+        taskManager.deleteSubtask(3);
+        List<Integer> list2 = epic.getSubtaskId();
+        Assertions.assertEquals(1, list2.size());
     }
 }
