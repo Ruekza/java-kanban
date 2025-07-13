@@ -57,6 +57,8 @@ public class FileBackedTaskManagerTest {
         Path path = Paths.get("fileForTest");
         TaskManager tm = fb.loadFromFile(path.toFile());
         // Менеджер содержит задачи после загрузки:
+        System.out.println(tm.getTasks());
+        System.out.println(tm.getEpics());
         Assertions.assertEquals(1, tm.getTasks().size());
         Assertions.assertEquals(1, tm.getEpics().size());
         System.out.println(" ");
