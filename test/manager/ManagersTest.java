@@ -7,13 +7,14 @@ import tasks.Status;
 import tasks.Task;
 
 
+import java.io.IOException;
 import java.util.List;
 
 public class ManagersTest {
 
 
     @Test
-    public void CreateAndWorkTaskManager() {
+    public void CreateAndWorkTaskManager() throws IOException {
         TaskManager taskManager = Managers.getDefault();
         Assertions.assertNotNull(taskManager); //проверяем, что объект-менеджер есть и не нулевой
         Task task = new Task("name", "desc", Status.NEW);

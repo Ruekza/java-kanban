@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import tasks.Status;
 import tasks.Task;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -12,6 +13,9 @@ public class InMemoryHistoryManagerTest {
 
     TaskManager taskManager = Managers.getDefault();
     HistoryManager historyManager = Managers.getDefaultHistory();
+
+    public InMemoryHistoryManagerTest() throws IOException {
+    }
 
     @Test
     public void checkTaskDoNotSavedPreviousVersionWhenAddedInHistoryManager1() { // 1 версия теста

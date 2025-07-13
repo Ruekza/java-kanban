@@ -32,7 +32,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public void removeAllHistory(List<Integer> idList) {
+    public void removeSomeTasksFromHistory(List<Integer> idList) {
         for (Integer id : idList) {
             remove(id);
         }

@@ -7,6 +7,7 @@ import tasks.Status;
 import tasks.Subtask;
 import tasks.Task;
 
+import java.io.IOException;
 import java.util.List;
 
 import java.util.ArrayList;
@@ -14,6 +15,9 @@ import java.util.ArrayList;
 public class InMemoryTaskManagerTest {
 
     TaskManager taskManager = Managers.getDefault();
+
+    public InMemoryTaskManagerTest() throws IOException {
+    }
 
     @Test
     public void checkTasksEqualsById() {
