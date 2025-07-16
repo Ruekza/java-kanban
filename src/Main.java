@@ -21,7 +21,7 @@ public class Main {
         TaskManager taskManager = Managers.getDefault();
 
         // создаем задачи и эпики с подзадачами
-        /*Task task1 = new Task("task1", "desc1", Status.NEW);
+        Task task1 = new Task("task1", "desc1", Status.NEW);
         taskManager.createTask(task1);
 
         Task task2 = new Task("task2", "desc2", Status.NEW);
@@ -50,11 +50,9 @@ public class Main {
         File createdFile = new File("fileTest");
         String content = Files.readString(Paths.get(createdFile.getAbsolutePath()));
         System.out.println("Содержимое файла:");
-        System.out.println(content);*/
-        
-       System.out.println("Проверяем загрузку задач из файла в менеджер");
-        File file = new File("C:/Users/User", "data1.csv");
-        FileBackedTaskManager fb = new FileBackedTaskManager(file);
+        System.out.println(content);
+
+        System.out.println("Проверяем загрузку задач из файла в менеджер");
         Path path = Paths.get("fileTest");
         TaskManager tm = loadFromFile(path.toFile());
         System.out.println(tm.getTasks());
