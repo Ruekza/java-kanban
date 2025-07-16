@@ -1,6 +1,5 @@
 package manager;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,7 +8,6 @@ import tasks.Status;
 import tasks.Subtask;
 import tasks.Task;
 
-import java.io.IOException;
 import java.util.List;
 
 import java.util.ArrayList;
@@ -80,8 +78,8 @@ public class InMemoryTaskManagerTest {
     @Test
     public void canCreateSubtaskAndFindById() {
         Epic epic = new Epic("Приготовить ужин", "Салат+чай", Status.NEW, null);
-        taskManager.createEpic(epic);
-        Subtask subtask = new Subtask("Сделать салат", "Греческй салат", Status.NEW, 1);
+        Epic savedEpic = taskManager.createEpic(epic);
+        Subtask subtask = new Subtask("Сделать салат", "Греческй салат", Status.NEW, savedEpic.getId());
         taskManager.createSubtask(subtask);
         ArrayList<Subtask> subtasks = taskManager.getSubtasks();
         Assertions.assertEquals(1, subtasks.size());

@@ -1,6 +1,7 @@
 package manager;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
 import tasks.Status;
@@ -18,6 +19,14 @@ public class FileBackedTaskManagerTest {
 
     public FileBackedTaskManagerTest() throws IOException {
     }
+
+    @BeforeEach
+    public void beforeEach() {
+        taskManager.deleteAllTasks();
+        taskManager.deleteAllSubtasks();
+        taskManager.deleteAllEpics();
+    }
+
 
     @Test
     public void saveAndLoadEmptyFile() {
@@ -51,7 +60,7 @@ public class FileBackedTaskManagerTest {
     @Test
     public void loadTasksFromFile() {
         System.out.println("Загрузка нескольких задач из файла:");
-        File file = new File("C:/Users/User", "data1.csv");
+        File file = new File("C:/Users/User", "data.csv");
         FileBackedTaskManager fb = new FileBackedTaskManager(file);
         // Менеджер пустой до загрузки:
         Assertions.assertEquals(0, fb.getTasks().size());

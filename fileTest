@@ -1,10 +1,1 @@
 id,type,name,status,description,epic
-1,TASK,task1,NEW,desc1,
-2,TASK,task2,NEW,desc2,
-8,TASK,task8,NEW,desc8,
-3,EPIC,epic3,DONE,desc3,
-4,EPIC,epic4,NEW,desc4,
-9,EPIC,epic9,NEW,desc9,
-5,SUBTASK,sub5,NEW,desc5,4
-6,SUBTASK,sub6,NEW,desc6,4
-7,SUBTASK,sub7,NEW,desc7,4
