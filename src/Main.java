@@ -8,6 +8,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.Path;
+
+import static manager.FileBackedTaskManager.loadFromFile;
 
 
 public class Main {
@@ -18,7 +21,7 @@ public class Main {
         TaskManager taskManager = Managers.getDefault();
 
         // создаем задачи и эпики с подзадачами
-        Task task1 = new Task("task1", "desc1", Status.NEW);
+        /*Task task1 = new Task("task1", "desc1", Status.NEW);
         taskManager.createTask(task1);
 
         Task task2 = new Task("task2", "desc2", Status.NEW);
@@ -47,16 +50,24 @@ public class Main {
         File createdFile = new File("fileTest");
         String content = Files.readString(Paths.get(createdFile.getAbsolutePath()));
         System.out.println("Содержимое файла:");
-        System.out.println(content);
-
-        /*System.out.println("Проверяем загрузку задач из файла в менеджер");
+        System.out.println(content);*/
+        
+       System.out.println("Проверяем загрузку задач из файла в менеджер");
         File file = new File("C:/Users/User", "data1.csv");
         FileBackedTaskManager fb = new FileBackedTaskManager(file);
         Path path = Paths.get("fileTest");
-        TaskManager tm = fb.loadFromFile(path.toFile());
+        TaskManager tm = loadFromFile(path.toFile());
         System.out.println(tm.getTasks());
         System.out.println(tm.getEpics());
-        System.out.println(tm.getSubtasks());*/
+        System.out.println(tm.getSubtasks());
 
+        System.out.println("Добавляем новую задачу в восстановленный менеджер");
+        Task task8 = new Task("task8", "desc8", Status.NEW);
+        taskManager.createTask(task8);
+        Epic epic9 = new Epic("epic9", "desc9", Status.NEW, null);
+        taskManager.createEpic(epic9);
+        System.out.println(taskManager.getTasks());
+        System.out.println(taskManager.getEpics());
+        System.out.println(taskManager.getSubtasks());
     }
 }

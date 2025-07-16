@@ -1,6 +1,7 @@
 package manager;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import tasks.Status;
 import tasks.Task;
@@ -42,7 +43,7 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void canAddTaskinHistory1() {  // 1 версия
+    public void canAddTaskInHistory1() {  // 1 версия
         Task task1 = new Task(1, "task1", "desc1", Status.NEW);
         historyManager.add(task1);
         List<Task> history = historyManager.getHistory();
@@ -50,7 +51,7 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void canAddTaskinHistory2() { // 2 версия
+    public void canAddTaskInHistory2() { // 2 версия
         Task task1 = new Task(1, "task1", "desc1", Status.NEW);
         taskManager.createTask(task1);
         taskManager.getTask(1);
@@ -64,7 +65,7 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void canRemoveTaskinHistory1() {
+    public void canRemoveTaskInHistory() {
         Task task1 = new Task(1, "task1", "desc1", Status.NEW);
         taskManager.createTask(task1);
         taskManager.getTask(1);

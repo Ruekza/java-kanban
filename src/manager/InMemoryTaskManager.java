@@ -13,10 +13,10 @@ import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    protected Map<Integer, Task> tasks = new HashMap<>();
-    protected Map<Integer, Subtask> subtasks = new HashMap<>();
-    protected Map<Integer, Epic> epics = new HashMap<>();
-    protected Integer generatorId = 1;
+    protected static Map<Integer, Task> tasks = new HashMap<>();
+    protected static Map<Integer, Subtask> subtasks = new HashMap<>();
+    protected static Map<Integer, Epic> epics = new HashMap<>();
+    protected static Integer generatorId = 1;
     protected HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
@@ -84,13 +84,6 @@ public class InMemoryTaskManager implements TaskManager {
         return epic;
     }
 
-    public Integer getGeneratorId() {
-        return generatorId;
-    }
-
-    public void setGeneratorId(Integer generatorId) {
-        this.generatorId = generatorId;
-    }
 
     @Override
     public Epic updateEpic(Epic epic) { // обновление эпика

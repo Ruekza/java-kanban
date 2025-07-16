@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static manager.FileBackedTaskManager.loadFromFile;
+
 public class FileBackedTaskManagerTest {
     TaskManager taskManager = Managers.getDefault();
 
@@ -26,7 +28,7 @@ public class FileBackedTaskManagerTest {
         }
         FileBackedTaskManager fb = new FileBackedTaskManager(file);
         fb.save();
-        fb.loadFromFile(file);
+        loadFromFile(file);
         Assertions.assertEquals(0, fb.getTasks().size(), "Есть задачи");
         Assertions.assertEquals(0, fb.getEpics().size(), "Есть эпики");
         Assertions.assertEquals(0, fb.getSubtasks().size(), "Есть подзадачи");
@@ -55,7 +57,7 @@ public class FileBackedTaskManagerTest {
         Assertions.assertEquals(0, fb.getTasks().size());
         Assertions.assertEquals(0, fb.getEpics().size());
         Path path = Paths.get("fileForTest");
-        TaskManager tm = fb.loadFromFile(path.toFile());
+        TaskManager tm = loadFromFile(path.toFile());
         // Менеджер содержит задачи после загрузки:
         System.out.println(tm.getTasks());
         System.out.println(tm.getEpics());
