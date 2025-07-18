@@ -52,7 +52,7 @@ public class Main {
         System.out.println("Содержимое файла:");
         System.out.println(content);
 
-        System.out.println("Проверяем загрузку задач из файла в менеджер");
+        System.out.println("Проверяем загрузку задач из файла в менеджер tm");
         Path path = Paths.get("fileTest");
         TaskManager tm = loadFromFile(path.toFile());
         System.out.println(tm.getTasks());
@@ -61,11 +61,27 @@ public class Main {
 
         System.out.println("Добавляем новую задачу в восстановленный менеджер");
         Task task8 = new Task("task8", "desc8", Status.NEW);
-        taskManager.createTask(task8);
+        tm.createTask(task8);
         Epic epic9 = new Epic("epic9", "desc9", Status.NEW, null);
-        taskManager.createEpic(epic9);
-        System.out.println(taskManager.getTasks());
-        System.out.println(taskManager.getEpics());
-        System.out.println(taskManager.getSubtasks());
+        tm.createEpic(epic9);
+        System.out.println(tm.getTasks());
+        System.out.println(tm.getEpics());
+        System.out.println(tm.getSubtasks());
+
+        System.out.println("Проверяем загрузку задач из файла в менеджер tm1");
+        Path path1 = Paths.get("fileTest");
+        TaskManager tm1 = loadFromFile(path1.toFile());
+        System.out.println(tm1.getTasks());
+        System.out.println(tm1.getEpics());
+        System.out.println(tm1.getSubtasks());
+
+        System.out.println("Добавляем новую задачу в восстановленный менеджер");
+        Task task10 = new Task("task10", "desc10", Status.NEW);
+        tm1.createTask(task10);
+        System.out.println(tm1.getTasks());
+        System.out.println(tm1.getEpics());
+        System.out.println(tm1.getSubtasks());
+
+
     }
 }

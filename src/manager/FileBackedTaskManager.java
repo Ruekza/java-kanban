@@ -22,32 +22,34 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try {
             String content = Files.readString(file.toPath());
             String[] split = content.split(System.lineSeparator());
+            Integer maxId = 1;
             for (String line : split) {
                 Task task = CSVFormatter.fromString(line);
                 if (task != null) {
-                    if (task.getId() >= generatorId) {
-                        generatorId = task.getId() + 1;
+                    if (task.getId() > maxId) {
+                        maxId = task.getId();
                     }
                     if (task instanceof Epic) {
-                        epics.put(task.getId(), (Epic) task);
+                        taskManager.epics.put(task.getId(), (Epic) task);
                     } else if (task instanceof Subtask) {
                         Subtask subtask = (Subtask) task;
-                        subtasks.put(task.getId(), subtask);
+                        taskManager.subtasks.put(task.getId(), subtask);
                         // добавляем ее в эпик:
-                        Epic epic = epics.get(subtask.getEpicId());
+                        Epic epic = taskManager.epics.get(subtask.getEpicId());
                         ArrayList<Integer> subtId = epic.getSubtaskId();
                         subtId.add(subtask.getId());
                     } else {
-                        tasks.put(task.getId(), task);
+                        taskManager.tasks.put(task.getId(), task);
                     }
                 }
             }
-
+            taskManager.generatorId = maxId + 1;
         } catch (IOException | ClassCastException e) {
-            e.printStackTrace();
+            throw new ManagerSaveException(e.getMessage());
         }
         return taskManager;
     }
+
 
     void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
@@ -65,8 +67,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 writer.write(CSVFormatter.toString(subtask));
                 writer.newLine();
             }
-        } catch (IOException | ClassCastException | ManagerSaveException exception) {
-            System.out.println(exception.getMessage());
+        } catch (IOException | ClassCastException exception) {
+            throw new ManagerSaveException("Ошибка при сохранении данных", exception);
         }
     }
 
