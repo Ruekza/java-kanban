@@ -1,6 +1,7 @@
 package manager;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
 import tasks.Status;
@@ -13,32 +14,38 @@ import java.util.ArrayList;
 
 public class InMemoryTaskManagerTest {
 
-    TaskManager taskManager = Managers.getDefault();
+    /* TaskManager taskManager = Managers.getDefault();*/
+    TaskManager taskManager = new InMemoryTaskManager();
+
+    @BeforeEach
+    public void beforeEach() {
+        taskManager.deleteAllTasks();
+        taskManager.deleteAllEpics();
+        taskManager.deleteAllSubtasks();
+    }
+
 
     @Test
     public void checkTasksEqualsById() {
         Task task = new Task("Отпуск", "Купить билеты", Status.NEW);
-        taskManager.createTask(task); // создается задача с id=1
-        Task savedTask = taskManager.getTask(1);
-        Assertions.assertEquals(task, savedTask, "Задачи не равны");
+        Task savedTask = taskManager.createTask(task); // создается задача с определенным id
+        Assertions.assertEquals(task, taskManager.getTask(savedTask.getId()), "Задачи не равны");
     }
 
     @Test
     public void checkEpicsEqualsById() {
         Epic epic = new Epic("Уборка", "Почистить квартиру", Status.NEW, null);
-        taskManager.createEpic(epic);
-        Epic savedEpic = taskManager.getEpic(1);
-        Assertions.assertEquals(epic, savedEpic, "Эпики не равны");
+        Epic savedEpic = taskManager.createEpic(epic);
+        Assertions.assertEquals(epic, taskManager.getEpic(savedEpic.getId()), "Эпики не равны");
     }
 
     @Test
     public void checkSubtasksEqualsById() {
         Epic epic = new Epic("Уборка", "Почистить квартиру", Status.NEW, null);
-        taskManager.createEpic(epic);
-        Subtask subtask = new Subtask("Помыть полы", "Без химии", Status.NEW, 1);
-        taskManager.createSubtask(subtask);
-        Task savedSubtask = taskManager.getSubtask(2);
-        Assertions.assertEquals(subtask, savedSubtask, "Подзадачи не равны");
+        Epic savedEpic = taskManager.createEpic(epic);
+        Subtask subtask = new Subtask("Помыть полы", "Без химии", Status.NEW, savedEpic.getId());
+        Task savedSubtask = taskManager.createSubtask(subtask);
+        Assertions.assertEquals(subtask, taskManager.getSubtask(savedSubtask.getId()), "Подзадачи не равны");
     }
 
     @Test
@@ -71,8 +78,8 @@ public class InMemoryTaskManagerTest {
     @Test
     public void canCreateSubtaskAndFindById() {
         Epic epic = new Epic("Приготовить ужин", "Салат+чай", Status.NEW, null);
-        taskManager.createEpic(epic);
-        Subtask subtask = new Subtask("Сделать салат", "Греческй салат", Status.NEW, 1);
+        Epic savedEpic = taskManager.createEpic(epic);
+        Subtask subtask = new Subtask("Сделать салат", "Греческй салат", Status.NEW, savedEpic.getId());
         taskManager.createSubtask(subtask);
         ArrayList<Subtask> subtasks = taskManager.getSubtasks();
         Assertions.assertEquals(1, subtasks.size());
@@ -114,14 +121,14 @@ public class InMemoryTaskManagerTest {
     @Test
     public void checkEpicDoesNotHaveRemovedSubtusk() {
         Epic epic = new Epic("epic", "desc_epic", Status.NEW, null);
-        taskManager.createEpic(epic);
-        Subtask sub1 = new Subtask("subtask1", "desc_sub1", Status.NEW, 1);
-        Subtask sub2 = new Subtask("subtask2", "desc_sub2", Status.NEW, 1);
+        Epic savedEpic = taskManager.createEpic(epic);
+        Subtask sub1 = new Subtask("subtask1", "desc_sub1", Status.NEW, savedEpic.getId());
+        Subtask sub2 = new Subtask("subtask2", "desc_sub2", Status.NEW, savedEpic.getId());
         taskManager.createSubtask(sub1);
         taskManager.createSubtask(sub2);
         List<Integer> list1 = epic.getSubtaskId();
         Assertions.assertEquals(2, list1.size());
-        taskManager.deleteSubtask(3);
+        taskManager.deleteSubtask(sub2.getId());
         List<Integer> list2 = epic.getSubtaskId();
         Assertions.assertEquals(1, list2.size());
     }

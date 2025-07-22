@@ -12,7 +12,11 @@ public class Epic extends Task {
 
     public Epic(Integer id, String name, String description, Status status, ArrayList<Integer> subtaskId) {
         super(id, name, description, status);
-        this.subtaskId = subtaskId;
+        this.subtaskId = new ArrayList<>();
+    }
+
+    public Epic(Integer id, String name, String description, Status status) {
+        super(id, name, description, status);
     }
 
     @Override

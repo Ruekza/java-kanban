@@ -13,11 +13,11 @@ import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private Map<Integer, Task> tasks = new HashMap<>();
-    private Map<Integer, Subtask> subtasks = new HashMap<>();
-    private Map<Integer, Epic> epics = new HashMap<>();
-    private Integer generatorId = 1;
-    private HistoryManager historyManager = Managers.getDefaultHistory();
+    protected Map<Integer, Task> tasks = new HashMap<>();
+    protected Map<Integer, Subtask> subtasks = new HashMap<>();
+    protected Map<Integer, Epic> epics = new HashMap<>();
+    protected Integer generatorId = 1;
+    protected HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
     public List<Task> getHistory() {
@@ -68,7 +68,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteAllTasks() { // удаление всех задач
         ArrayList<Integer> idList = new ArrayList<>(tasks.keySet());
         tasks.clear();
-        historyManager.removeAllHistory(idList);
+        historyManager.removeSomeTasksFromHistory(idList);
     }
 
     // МЕТОДЫ ДЛЯ ЭПИКА
@@ -83,6 +83,7 @@ public class InMemoryTaskManager implements TaskManager {
         epics.put(epic.getId(), epic);
         return epic;
     }
+
 
     @Override
     public Epic updateEpic(Epic epic) { // обновление эпика
@@ -117,11 +118,11 @@ public class InMemoryTaskManager implements TaskManager {
         for (Epic epic : epics.values()) {
             ArrayList<Integer> subtId = epic.getSubtaskId();
             if (subtId != null) {
-                historyManager.removeAllHistory(subtId);
+                historyManager.removeSomeTasksFromHistory(subtId);
             }
         }
         ArrayList<Integer> idList = new ArrayList<>(epics.keySet());
-        historyManager.removeAllHistory(idList);
+        historyManager.removeSomeTasksFromHistory(idList);
         subtasks.clear();
         epics.clear();
     }
@@ -220,7 +221,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteAllSubtasks() { // удаление всех подзадач и из эпика тоже
         for (Epic epic : epics.values()) {
             ArrayList<Integer> subtId = epic.getSubtaskId();
-            historyManager.removeAllHistory(subtId);
+            historyManager.removeSomeTasksFromHistory(subtId);
             subtId.clear();
         }
         subtasks.clear();
