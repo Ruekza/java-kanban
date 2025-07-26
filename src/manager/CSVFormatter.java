@@ -26,7 +26,7 @@ public class CSVFormatter {
             type = Type.SUBTASK;
             idEpic = ((Subtask) task).getEpicId();
         }
-        return task.getId() + "," + type + "," + task.getName() + "," + task.getStatus() + "," + task.getDescription() + "," + task.getStartTime() +"," + task.getDuration() + "," + (idEpic != null ? idEpic : "");
+        return task.getId() + "," + type + "," + task.getName() + "," + task.getStatus() + "," + task.getDescription() + "," + task.getStartTime() + "," + task.getDuration() + "," + (idEpic != null ? idEpic : "");
     }
 
     public static Task fromString(String line) {
