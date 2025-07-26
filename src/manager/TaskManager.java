@@ -4,6 +4,7 @@ import tasks.Epic;
 import tasks.Subtask;
 import tasks.Task;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +12,12 @@ public interface TaskManager {
 
     List<Task> getHistory();
 
+    List<Task> getPrioritizedTasks();
+
+    public boolean isCrossing(Task t1, Task t2);
 
     // МЕТОДЫ ДЛЯ ЗАДАЧИ
+
     ArrayList<Task> getTasks();
 
     Task createTask(Task task);
