@@ -42,11 +42,11 @@ public class InMemoryTaskManager implements TaskManager {
         if (prioritizedTasks.isEmpty()) {
             return false;
         } else {
-            Set<Task> CrossingTasks = prioritizedTasks.stream()
+            Set<Task> crossingTasks = prioritizedTasks.stream()
                     .filter(prioritizedTask -> !prioritizedTask.equals(task)) // потребуется при обновлении задачи: она не должна сравниваться с предыдущей своей версией
                     .filter(prioritizedTask -> isCrossing(prioritizedTask, task))
                     .collect(Collectors.toSet());
-            if (!CrossingTasks.isEmpty()) {
+            if (!crossingTasks.isEmpty()) {
                 return true;
             } else {
                 return false;
