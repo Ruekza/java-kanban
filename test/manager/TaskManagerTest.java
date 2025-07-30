@@ -176,7 +176,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void checkCrossingTasksException() {
-        Assertions.assertThrows(ManagerSaveException.class, () -> {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
             Task task1 = new Task("name1", "desc1", Status.NEW, LocalDateTime.of(2025, 4, 26, 14, 02), Duration.ofMinutes(60));
             taskManager.createTask(task1);
             Task task2 = new Task("name2", "desc2", Status.NEW, LocalDateTime.of(2025, 4, 26, 14, 30), Duration.ofMinutes(45));
