@@ -1,6 +1,5 @@
 package manager;
 
-import exceptions.ManagerSaveException;
 import tasks.Epic;
 import tasks.Status;
 import tasks.Subtask;
@@ -19,7 +18,9 @@ public class InMemoryTaskManager implements TaskManager {
     protected Map<Integer, Epic> epics = new HashMap<>();
     protected Integer generatorId = 1;
     protected HistoryManager historyManager = Managers.getDefaultHistory();
-    protected Set<Task> prioritizedTasks = new TreeSet<>();
+    protected Set<Task> prioritizedTasks = new TreeSet<>((Task task1, Task task2) -> {
+        return task1.getStartTime().compareTo(task2.getStartTime());
+    });
 
     @Override
     public List<Task> getHistory() {
@@ -37,6 +38,22 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
 
+    public boolean isTaskCrossing(Task task) {
+        if (prioritizedTasks.isEmpty()) {
+            return false;
+        } else {
+            Set<Task> CrossingTasks = prioritizedTasks.stream()
+                    .filter(prioritizedTask -> !prioritizedTask.equals(task)) // потребуется при обновлении задачи: она не должна сравниваться с предыдущей своей версией
+                    .filter(prioritizedTask -> isCrossing(prioritizedTask, task))
+                    .collect(Collectors.toSet());
+            if (!CrossingTasks.isEmpty()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
     // МЕТОДЫ ДЛЯ ЗАДАЧИ
     @Override
     public ArrayList<Task> getTasks() { // получение списка всех задач
@@ -44,24 +61,14 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task createTask(Task task) throws ManagerSaveException { // создание задачи
-        if (prioritizedTasks.isEmpty()) {
+    public Task createTask(Task task) throws IllegalArgumentException { // создание задачи
+        if (isTaskCrossing(task)) {
+            throw new IllegalArgumentException("Задача пересекается с другими");
+        } else {
             task.setId(getNextId());
             tasks.put(task.getId(), task);
             prioritizedTasks.add(task);
             return task;
-        } else {
-            Set<Task> notCrossingTasks = prioritizedTasks.stream()
-                    .filter(prioritizedTask -> !isCrossing(prioritizedTask, task))
-                    .collect(Collectors.toSet());
-            if (notCrossingTasks.isEmpty()) {
-                throw new ManagerSaveException("Задача пересекается с другими");
-            } else {
-                task.setId(getNextId());
-                tasks.put(task.getId(), task);
-                prioritizedTasks.add(task);
-                return task;
-            }
         }
     }
 
@@ -71,15 +78,11 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task updateTask(Task task) { // обновление задачи
+    public Task updateTask(Task task) throws IllegalArgumentException { // обновление задачи
         if (tasks.containsKey(task.getId())) {
             Task oldTask = tasks.get(task.getId());
-            Set<Task> crossingTasks = prioritizedTasks.stream()
-                    .filter(prioritizedTask -> !prioritizedTask.equals(task))
-                    .filter(prioritizedTask -> isCrossing(prioritizedTask, task))
-                    .collect(Collectors.toSet());
-            if (!crossingTasks.isEmpty()) {
-                throw new ManagerSaveException("Задача пересекается с другими");
+            if (isTaskCrossing(task)) {
+                throw new IllegalArgumentException("Задача пересекается с другими");
             } else {
                 tasks.put(task.getId(), task);
                 prioritizedTasks.remove(oldTask);
@@ -235,6 +238,13 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    public void updateFieldsOfEpic() {
+        updateStatusOfEpic();
+        updateStartTimeOfEpic();
+        updateDurationOfEpic();
+        updateEndTimeOfEpic();
+    }
+
     // МЕТОДЫ ДЛЯ ПОДЗАДАЧ
     // получение списка всех подзадач
     @Override
@@ -244,9 +254,11 @@ public class InMemoryTaskManager implements TaskManager {
 
 
     @Override
-    public Subtask createSubtask(Subtask subtask) throws ManagerSaveException {  // создание подзадачи и добавление в эпик
-        // создаем подзадачу:
-        if (prioritizedTasks.isEmpty()) {
+    public Subtask createSubtask(Subtask subtask) throws IllegalArgumentException {  // создание подзадачи и добавление в эпик
+        if (isTaskCrossing(subtask)) {
+            throw new IllegalArgumentException("Подзадача пересекается с другими");
+        } else {
+            // создаем подзадачу:
             if (epics.containsKey(subtask.getEpicId())) {
                 subtask.setId(getNextId());
                 subtasks.put(subtask.getId(), subtask);
@@ -254,56 +266,24 @@ public class InMemoryTaskManager implements TaskManager {
                 Epic epic = epics.get(subtask.getEpicId());
                 ArrayList<Integer> subtId = epic.getSubtaskId();
                 subtId.add(subtask.getId());
-                updateStatusOfEpic();
-                updateStartTimeOfEpic();
-                updateDurationOfEpic();
-                updateEndTimeOfEpic();
+                updateFieldsOfEpic();
                 prioritizedTasks.add(subtask);
             }
             return subtask;
-        } else {
-            Set<Task> notCrossingTasks = prioritizedTasks.stream()
-                    .filter(prioritizedTask -> !isCrossing(prioritizedTask, subtask))
-                    .collect(Collectors.toSet());
-            if (notCrossingTasks.isEmpty()) {
-                throw new ManagerSaveException("Подзадача пересекается с другими");
-            } else {
-                if (epics.containsKey(subtask.getEpicId())) {
-                    subtask.setId(getNextId());
-                    subtasks.put(subtask.getId(), subtask);
-                    // добавляем ее в эпик:
-                    Epic epic = epics.get(subtask.getEpicId());
-                    ArrayList<Integer> subtId = epic.getSubtaskId();
-                    subtId.add(subtask.getId());
-                    updateStatusOfEpic();
-                    updateStartTimeOfEpic();
-                    updateDurationOfEpic();
-                    updateEndTimeOfEpic();
-                    prioritizedTasks.add(subtask);
-                }
-                return subtask;
-            }
         }
     }
 
+
     @Override
     public Subtask updateSubtask(Subtask subtask) { // обновление подзадачи
-        // обновляем подзадачу:
         if (subtasks.containsKey(subtask.getId())) {
             Subtask oldSubtask = subtasks.get(subtask.getId());
-            Set<Task> crossingTasks = prioritizedTasks.stream()
-                    .filter(prioritizedTask -> !prioritizedTask.equals(subtask))
-                    .filter(prioritizedTask -> isCrossing(prioritizedTask, subtask))
-                    .collect(Collectors.toSet());
-            if (!crossingTasks.isEmpty()) {
-                throw new ManagerSaveException("Подзадача пересекается с другими");
+            if (isTaskCrossing(subtask)) {
+                throw new IllegalArgumentException("Подзадача пересекается с другими");
             } else {
                 subtasks.put(subtask.getId(), subtask);
-                // обновляем статус эпика:
-                updateStatusOfEpic();
-                updateStartTimeOfEpic();
-                updateDurationOfEpic();
-                updateEndTimeOfEpic();
+                // обновляем расчётные поля эпика:
+                updateFieldsOfEpic();
                 prioritizedTasks.remove(oldSubtask);
                 prioritizedTasks.add(subtask);
             }
@@ -320,10 +300,7 @@ public class InMemoryTaskManager implements TaskManager {
         Epic epic = epics.get(subtask.getEpicId());
         ArrayList<Integer> subt = epic.getSubtaskId();
         subt.remove(id);
-        updateStatusOfEpic();
-        updateStartTimeOfEpic();
-        updateDurationOfEpic();
-        updateEndTimeOfEpic();
+        updateFieldsOfEpic();
         return subtasks.remove(id);
     }
 
@@ -354,10 +331,7 @@ public class InMemoryTaskManager implements TaskManager {
             subtId.clear();
         }
         subtasks.clear();
-        updateStatusOfEpic();
-        updateStartTimeOfEpic();
-        updateDurationOfEpic();
-        updateEndTimeOfEpic();
+        updateFieldsOfEpic();
     }
 
 }

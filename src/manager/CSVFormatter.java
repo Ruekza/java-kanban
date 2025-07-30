@@ -9,7 +9,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class CSVFormatter {
-    /*private static Integer idEpic; */
 
     public static String getHeader() {
         return "id,type,name,status,description,startTime,duration,epic";
@@ -47,9 +46,9 @@ public class CSVFormatter {
                 return new Task(id, name, description, status, startTime, duration);
             }
             if (type.equals(Type.EPIC)) {
-                return new Epic(id, name, description, status, startTime, duration,  null);
+                return new Epic(id, name, description, status, startTime, duration, null);
             } else {
-                int idEpic = Integer.parseInt(split[5]);
+                int idEpic = Integer.parseInt(split[7]);
                 return new Subtask(id, name, description, status, startTime, duration, idEpic);
             }
         } catch (NumberFormatException e) {
