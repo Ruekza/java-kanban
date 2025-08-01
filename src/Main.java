@@ -4,11 +4,11 @@ import tasks.Status;
 import tasks.Subtask;
 import tasks.Task;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 import static manager.FileBackedTaskManager.loadFromFile;
 
@@ -20,37 +20,24 @@ public class Main {
 
         TaskManager taskManager = Managers.getDefault();
 
-        // создаем задачи и эпики с подзадачами
-        Task task1 = new Task("task1", "desc1", Status.NEW);
+        Task task1 = new Task("task1", "desc1", Status.NEW, LocalDateTime.of(2025, 7, 23, 10, 12), Duration.ofMinutes(90));
         taskManager.createTask(task1);
+        Epic epic2 = new Epic("epic2", "desc2", Status.NEW, LocalDateTime.of(2025, 7, 25, 10, 00), Duration.ofMinutes(50), null);
+        taskManager.createEpic(epic2);
+        Subtask subtask3 = new Subtask("sub3", "desc3", Status.NEW, LocalDateTime.of(2025, 6, 28, 12, 15), Duration.ofMinutes(240), 2);
+        Subtask subtask4 = new Subtask("sub4", "desc4", Status.NEW, LocalDateTime.of(2025, 8, 01, 15, 00), Duration.ofMinutes(240), 2);
+        taskManager.createSubtask(subtask3);
+        taskManager.createSubtask(subtask4);
 
-        Task task2 = new Task("task2", "desc2", Status.NEW);
-        taskManager.createTask(task2);
+        Task task5 = new Task(task1.getId(), "task5", "desc5", Status.NEW, LocalDateTime.of(2025, 9, 23, 10, 30), Duration.ofMinutes(90));
+        taskManager.updateTask(task5);
+        Subtask subtask7 = new Subtask(4, "sub4", "desc4", Status.IN_PROGRESS, LocalDateTime.of(2025, 10, 23, 10, 35), Duration.ofMinutes(240), 2);
+        taskManager.updateSubtask(subtask7);
 
-        Epic epic3 = new Epic("epic3", "desc3", Status.NEW, null);
-        taskManager.createEpic(epic3);
-
-        Epic epic4 = new Epic("epic4", "desc4", Status.NEW, null);
-        taskManager.createEpic(epic4);
-
-        Subtask subtask5 = new Subtask("sub5", "desc5", Status.NEW, 4);
-        taskManager.createSubtask(subtask5);
-
-        Subtask subtask6 = new Subtask("sub6", "desc6", Status.NEW, 4);
-        taskManager.createSubtask(subtask6);
-
-        Subtask subtask7 = new Subtask("sub7", "desc7", Status.NEW, 4);
-        taskManager.createSubtask(subtask7);
-
-        System.out.println("Создание задач, эпиков, подзадач в памяти менеджера");
         System.out.println(taskManager.getTasks());
         System.out.println(taskManager.getEpics());
         System.out.println(taskManager.getSubtasks());
-        System.out.println();
-        File createdFile = new File("fileTest");
-        String content = Files.readString(Paths.get(createdFile.getAbsolutePath()));
-        System.out.println("Содержимое файла:");
-        System.out.println(content);
+        System.out.println(taskManager.getPrioritizedTasks());
 
         System.out.println("Проверяем загрузку задач из файла в менеджер tm");
         Path path = Paths.get("fileTest");
@@ -58,30 +45,7 @@ public class Main {
         System.out.println(tm.getTasks());
         System.out.println(tm.getEpics());
         System.out.println(tm.getSubtasks());
-
-        System.out.println("Добавляем новую задачу в восстановленный менеджер");
-        Task task8 = new Task("task8", "desc8", Status.NEW);
-        tm.createTask(task8);
-        Epic epic9 = new Epic("epic9", "desc9", Status.NEW, null);
-        tm.createEpic(epic9);
-        System.out.println(tm.getTasks());
-        System.out.println(tm.getEpics());
-        System.out.println(tm.getSubtasks());
-
-        System.out.println("Проверяем загрузку задач из файла в менеджер tm1");
-        Path path1 = Paths.get("fileTest");
-        TaskManager tm1 = loadFromFile(path1.toFile());
-        System.out.println(tm1.getTasks());
-        System.out.println(tm1.getEpics());
-        System.out.println(tm1.getSubtasks());
-
-        System.out.println("Добавляем новую задачу в восстановленный менеджер");
-        Task task10 = new Task("task10", "desc10", Status.NEW);
-        tm1.createTask(task10);
-        System.out.println(tm1.getTasks());
-        System.out.println(tm1.getEpics());
-        System.out.println(tm1.getSubtasks());
-
+        System.out.println(tm.getPrioritizedTasks());
 
     }
 }

@@ -1,2 +1,1 @@
-id,type,name,status,description,epic
-2,TASK,task2,NEW,desc2,
+id,type,name,status,description,startTime,duration,epic

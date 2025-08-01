@@ -11,8 +11,12 @@ public interface TaskManager {
 
     List<Task> getHistory();
 
+    List<Task> getPrioritizedTasks();
+
+    public boolean isCrossing(Task t1, Task t2);
 
     // МЕТОДЫ ДЛЯ ЗАДАЧИ
+
     ArrayList<Task> getTasks();
 
     Task createTask(Task task);

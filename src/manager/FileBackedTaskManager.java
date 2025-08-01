@@ -34,12 +34,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     } else if (task instanceof Subtask) {
                         Subtask subtask = (Subtask) task;
                         taskManager.subtasks.put(task.getId(), subtask);
+                        taskManager.prioritizedTasks.add(subtask);
                         // добавляем ее в эпик:
                         Epic epic = taskManager.epics.get(subtask.getEpicId());
                         ArrayList<Integer> subtId = epic.getSubtaskId();
                         subtId.add(subtask.getId());
                     } else {
                         taskManager.tasks.put(task.getId(), task);
+                        taskManager.prioritizedTasks.add(task);
                     }
                 }
             }
