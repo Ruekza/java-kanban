@@ -12,6 +12,7 @@ public class Managers {
 
     public static TaskManager getDefault() throws IOException {
         return new FileBackedTaskManager(new File("fileTest"));
+//        return new InMemoryTaskManager();
     }
 
 
