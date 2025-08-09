@@ -2,16 +2,12 @@ package handler;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
 import com.sun.net.httpserver.HttpExchange;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class BaseHttpHandler {
 
@@ -47,43 +43,5 @@ public class BaseHttpHandler {
                 .registerTypeAdapter(Duration.class, new DurationAdapter());
         return gsonBuilder.create();
     }
-}
-
-class LocalDateTimeAdapter extends TypeAdapter<LocalDateTime> {
-
-    private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
-
-    @Override
-    public void write(JsonWriter jsonWriter, LocalDateTime localDateTime) throws IOException {
-        if (localDateTime == null) {
-            jsonWriter.nullValue();
-        } else {
-            jsonWriter.value(localDateTime.format(dtf));
-        }
-    }
-
-    @Override
-    public LocalDateTime read(JsonReader jsonReader) throws IOException {
-        return LocalDateTime.parse(jsonReader.nextString(), dtf);
-    }
-}
-
-class DurationAdapter extends TypeAdapter<Duration> {
-
-    @Override
-    public void write(JsonWriter jsonWriter, Duration duration) throws IOException {
-        if (duration == null) {
-            jsonWriter.nullValue();
-        } else {
-            jsonWriter.value(duration.toMinutes());
-        }
-    }
-
-    @Override
-    public Duration read(JsonReader jsonReader) throws IOException {
-        long minutes = jsonReader.nextLong();
-        return Duration.ofMinutes(minutes);
-    }
-
 }
 
