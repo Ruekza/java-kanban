@@ -10,11 +10,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+import static handler.HttpMethod.*;
+import static handler.ResponseCode.CREATED;
+import static handler.ResponseCode.INTERNAL_SERVER_ERROR;
+
 
 public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
-
-    Gson gson = getGson();
-    TaskManager taskManager;
+    private TaskManager taskManager;
 
     public EpicsHandler(TaskManager taskManager) {
         this.taskManager = taskManager;
@@ -31,7 +33,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
             String method = exchange.getRequestMethod();
             String response;
             switch (method) {
-                case "GET": {
+                case GET: {
                     String[] parts = path.split("/");
                     if (parts.length == 3) {
                         String idStr = parts[2];
@@ -65,7 +67,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
                     }
                     break;
                 }
-                case "POST": {
+                case POST: {
                     InputStream inputStream = exchange.getRequestBody();
                     String jsonString = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
                     Epic epic = gson.fromJson(jsonString, Epic.class);
@@ -73,14 +75,14 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
                         if (epic.getId() == null || epic.getId() == 0) {
                             try {
                                 taskManager.createEpic(epic);
-                                exchange.sendResponseHeaders(201, 0);
+                                exchange.sendResponseHeaders(CREATED, 0);
                             } catch (IllegalArgumentException e) {
                                 sendHasOverlaps(exchange);
                             }
                         } else {
                             try {
                                 taskManager.updateEpic(epic);
-                                exchange.sendResponseHeaders(201, 0);
+                                exchange.sendResponseHeaders(CREATED, 0);
                             } catch (IllegalArgumentException e) {
                                 sendHasOverlaps(exchange);
                             }
@@ -90,7 +92,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
                     }
                     break;
                 }
-                case "DELETE": {
+                case DELETE: {
                     String[] parts = path.split("/");
                     if (parts.length > 2) {
                         String idStr = parts[2];
@@ -109,13 +111,13 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
                     }
                 }
                 default: {
-                    exchange.sendResponseHeaders(500, 0);
+                    exchange.sendResponseHeaders(INTERNAL_SERVER_ERROR, 0);
                     break;
                 }
             }
         } catch (Exception exception) {
             exception.printStackTrace();
-            exchange.sendResponseHeaders(500, 0);
+            exchange.sendResponseHeaders(INTERNAL_SERVER_ERROR, 0);
         } finally {
             exchange.close();
         }

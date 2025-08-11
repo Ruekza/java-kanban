@@ -7,10 +7,12 @@ import manager.TaskManager;
 
 import java.io.IOException;
 
+import static handler.HttpMethod.GET;
+import static handler.ResponseCode.INTERNAL_SERVER_ERROR;
+
 
 public class HistoryHandler extends BaseHttpHandler implements HttpHandler {
-    Gson gson = getGson();
-    TaskManager taskManager;
+    private TaskManager taskManager;
 
     public HistoryHandler(TaskManager taskManager) {
         this.taskManager = taskManager;
@@ -25,19 +27,19 @@ public class HistoryHandler extends BaseHttpHandler implements HttpHandler {
             String path = exchange.getRequestURI().getPath();
             String method = exchange.getRequestMethod();
             switch (method) {
-                case "GET": {
+                case GET: {
                     String response = gson.toJson(taskManager.getHistory());
                     sendText(exchange, response);
                     break;
                 }
                 default: {
-                    exchange.sendResponseHeaders(500, 0);
+                    exchange.sendResponseHeaders(INTERNAL_SERVER_ERROR, 0);
                     break;
                 }
             }
         } catch (Exception exception) {
             exception.printStackTrace();
-            exchange.sendResponseHeaders(500, 0);
+            exchange.sendResponseHeaders(INTERNAL_SERVER_ERROR, 0);
         } finally {
             exchange.close();
         }

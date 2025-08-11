@@ -10,9 +10,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+import static handler.HttpMethod.*;
+import static handler.ResponseCode.CREATED;
+import static handler.ResponseCode.INTERNAL_SERVER_ERROR;
+
 public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
-    Gson gson = getGson();
-    TaskManager taskManager;
+    private TaskManager taskManager;
 
     public SubtasksHandler(TaskManager taskManager) {
         this.taskManager = taskManager;
@@ -28,7 +31,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
             String method = exchange.getRequestMethod();
             String response;
             switch (method) {
-                case "GET": {
+                case GET: {
                     String[] parts = path.split("/");
                     if (parts.length > 2) {
                         String idStr = parts[2];
@@ -49,7 +52,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
                     }
                     break;
                 }
-                case "POST": {
+                case POST: {
                     InputStream inputStream = exchange.getRequestBody();
                     String jsonString = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
                     Subtask subtask = gson.fromJson(jsonString, Subtask.class);
@@ -57,14 +60,14 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
                         if (subtask.getId() == null || subtask.getId() == 0) {
                             try {
                                 taskManager.createSubtask(subtask);
-                                exchange.sendResponseHeaders(201, 0);
+                                exchange.sendResponseHeaders(CREATED, 0);
                             } catch (IllegalArgumentException e) {
                                 sendHasOverlaps(exchange);
                             }
                         } else {
                             try {
                                 taskManager.updateSubtask(subtask);
-                                exchange.sendResponseHeaders(201, 0);
+                                exchange.sendResponseHeaders(CREATED, 0);
                             } catch (IllegalArgumentException e) {
                                 sendHasOverlaps(exchange);
                             }
@@ -74,7 +77,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
                     }
                     break;
                 }
-                case "DELETE": {
+                case DELETE: {
                     String[] parts = path.split("/");
                     if (parts.length > 2) {
                         String idStr = parts[2];
@@ -93,13 +96,13 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
                     }
                 }
                 default: {
-                    exchange.sendResponseHeaders(500, 0);
+                    exchange.sendResponseHeaders(INTERNAL_SERVER_ERROR, 0);
                     break;
                 }
             }
         } catch (Exception exception) {
             exception.printStackTrace();
-            exchange.sendResponseHeaders(500, 0);
+            exchange.sendResponseHeaders(INTERNAL_SERVER_ERROR, 0);
         } finally {
             exchange.close();
         }
