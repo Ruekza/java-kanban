@@ -69,14 +69,19 @@ public class FileBackedTaskManagerTest extends TaskManagerTest {
     @Test
     public void loadTasksFromFile() {
         System.out.println("Загрузка нескольких задач из файла:");
-        File file = new File("C:/Users/User", "data.csv");
-        FileBackedTaskManager fb = new FileBackedTaskManager(file);
         // Менеджер пустой до загрузки:
+        File file = new File("fileForTest");
+        FileBackedTaskManager fb = new FileBackedTaskManager(file);
         Assertions.assertEquals(0, fb.getTasks().size());
         Assertions.assertEquals(0, fb.getEpics().size());
+        // Сохранение нескольких задач в файл:
+        Task task = new Task("task", "descTask", Status.NEW, LocalDateTime.of(2025, 7, 26, 14, 02), Duration.ofMinutes(45));
+        fb.createTask(task);
+        Epic epic = new Epic("epic", "decsEpic", Status.DONE, LocalDateTime.of(2025, 11, 10, 23, 02), Duration.ofMinutes(45), null);
+        fb.createEpic(epic);
+        // Менеджер содержит задачи после загрузки:
         Path path = Paths.get("fileForTest");
         TaskManager tm = loadFromFile(path.toFile());
-        // Менеджер содержит задачи после загрузки:
         System.out.println(tm.getTasks());
         System.out.println(tm.getEpics());
         Assertions.assertEquals(1, tm.getTasks().size());

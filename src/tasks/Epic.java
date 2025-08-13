@@ -11,11 +11,19 @@ public class Epic extends Task {
     public Epic(String name, String description, Status status, LocalDateTime startTime, Duration duration, ArrayList<Integer> subtaskId) {
         super(name, description, status, startTime, duration);
         this.subtaskId = new ArrayList<>();
+        this.endTime = getStartTime().plus(getDuration());
+    }
+
+    public Epic(String name, String description, Status status, LocalDateTime startTime, Duration duration) {
+        super(name, description, status, startTime, duration);
+        this.subtaskId = new ArrayList<>();
+        this.endTime = getStartTime().plus(getDuration());
     }
 
     public Epic(Integer id, String name, String description, Status status, LocalDateTime startTime, Duration duration, ArrayList<Integer> subtaskId) {
         super(id, name, description, status, startTime, duration);
         this.subtaskId = new ArrayList<>();
+        this.endTime = getStartTime().plus(getDuration());
     }
 
     public Epic(Integer id, String name, String description, Status status, LocalDateTime startTime, Duration duration) {
@@ -31,7 +39,8 @@ public class Epic extends Task {
                 ", status=" + getStatus() + '\'' +
                 ", startTime=" + getStartTime() + '\'' +
                 ", duration=" + getDuration() + '\'' +
-                ", subtaskId=" + subtaskId +
+                ", subtaskId=" + subtaskId + '\'' +
+                ", endTime=" + endTime +
                 '}';
     }
 
@@ -51,4 +60,5 @@ public class Epic extends Task {
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
+
 }
